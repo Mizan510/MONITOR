@@ -1,0 +1,43 @@
+const mongoose = require("mongoose");
+
+const FormDataESchema = new mongoose.Schema({
+  userName: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+
+  // Forecast Section
+  salesForecast: { type: Number, required: true },
+  strategicRxForecast: { type: Number },
+  focusRxForecast: { type: Number },
+  newProductRxForecast: { type: Number },
+  opdRxForecast: { type: Number },
+  gpRxForecast: { type: Number },
+  dischargeRxForecast: { type: Number },
+
+  // Rx Section
+  totalStrategicRx: { type: Number },
+  totalFocusRx: { type: Number },
+  totalNewProductRx: { type: Number },
+  otherProductsRxSBUE: { type: Number },
+  totalRxs: { type: Number },
+  opdRx: { type: Number },
+  dischargeRx: { type: Number },
+  gpRx: { type: Number },
+
+  // Order Section
+  SBUEOrderRouteName: { type: String },
+  noOfPartySBUEOrderRoute: { type: Number },
+  noOfCollectedOrderSBUE: { type: Number },
+  noOfNotGivingOrderParty: { type: Number },
+  causeOfNotGivingOrder: { type: String },
+  marketTotalOrder: { type: Number },
+  rosuvaOrder: { type: Number },
+  camlosartOrder: { type: Number },
+  newProductOrder: { type: Number },
+
+  // Survey Section
+  rxSendInDIDS: { type: Number },
+  writtenRxInSurveyPad: { type: Number },
+  indoorSurvey: { type: String },
+});
+
+module.exports = mongoose.model("FormDataE", FormDataESchema);

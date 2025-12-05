@@ -1,0 +1,141 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+export default function AdminRegister() {
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "user",
+  });
+
+  const [message, setMessage] = useState("");
+
+  // 🔍 Check if any Master Admin exists
+  useEffect(() => {
+    async function checkAdmin() {
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/check-admin");
+        const data = await res.json();
+
+        if (!data.exists) {
+          alert("No Master Admin exists yet!");
+        }
+      } catch (err) {
+        console.log("Server error checking admin", err);
+      }
+    }
+
+    checkAdmin();
+  }, []);
+
+  // 🔄 Input change
+  function handleChange(e) {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
+  // 🚀 Submit Form
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setMessage("");
+
+    try {
+      // get current admin id (replace with your auth/context if different)
+      const stored = JSON.parse(localStorage.getItem("user"));
+      const adminId = stored?._id; // ensure you save _id at login
+
+      const res = await fetch("http://localhost:5000/api/auth/register-user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          password: form.password,
+          adminId, // required by backend
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setMessage(data.message || "Registration failed");
+        return;
+      }
+
+      setMessage("User registered successfully!");
+
+      // Reset fields
+      setForm({ name: "", email: "", password: "", role: "user" });
+
+      setTimeout(() => navigate("/admin-dashboard"), 1500);
+    } catch (err) {
+      setMessage("Server error. Try again.");
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
+      <div className="bg-white shadow-2xl rounded-xl p-8 w-full max-w-lg">
+        <h1 className="text-3xl font-bold mb-4 text-center">
+          Admin Registration
+        </h1>
+        <p className="text-2xl text-red-500 font-semibold mb-1 text-center">
+          User registration by Admin
+        </p>
+
+        {message && (
+          <div className="bg-blue-100 text-blue-700 p-3 rounded-lg mb-4 text-center">
+            {message}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="text-gray-600">Name</label>
+            <input
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border rounded-lg"
+            />
+          </div>
+
+          <div>
+            <label className="text-gray-600">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border rounded-lg"
+            />
+          </div>
+
+          <div>
+            <label className="text-gray-600">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border rounded-lg"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700"
+          >
+            Register your User
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
