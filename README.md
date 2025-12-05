@@ -20,3 +20,8 @@ finnaly find if any previous text exits...
 
 
 // master pass is in ProtectedRoute.jsx
+
+
+git add .
+git commit -m "Something Updated"
+git push origin main
