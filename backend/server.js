@@ -8,11 +8,15 @@ const app = express();
 
 // Middlewares
 app.use(express.json()); // Parse JSON bodies
-// app.use(cors()); // Enable CORS
+const cors = require("cors");
+
 app.use(cors({
-  origin: ["https://monitor-eight-sigma.vercel.app"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
+  origin: [
+    "https://monitor-eight-sigma.vercel.app",   // your Vercel frontend domain
+    "http://localhost:5173"                     // for local Vite dev
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"]
 }));
 
 
