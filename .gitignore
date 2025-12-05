@@ -17,6 +17,9 @@ package-lock.json
 .env.local
 .env.*.local
 
+# frontend env
+frontend/.env
+
 # System
 Thumbs.db
 .DS_Store

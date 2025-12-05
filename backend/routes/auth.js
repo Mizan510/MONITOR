@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 
 /* ----------------------------------------------------
-   MASTER → REGISTER ADMIN
+   MASTER → REGISTER ADMIN  
 ----------------------------------------------------- */
 router.post("/register-admin", async (req, res) => {
   try {

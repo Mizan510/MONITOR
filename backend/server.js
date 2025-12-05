@@ -8,7 +8,13 @@ const app = express();
 
 // Middlewares
 app.use(express.json()); // Parse JSON bodies
-app.use(cors()); // Enable CORS
+// app.use(cors()); // Enable CORS
+app.use(cors({
+  origin: ["https://monitor-eight-sigma.vercel.app"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 
 // Connect database
 connectDB();
