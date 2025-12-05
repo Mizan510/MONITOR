@@ -8,14 +8,16 @@ const app = express();
 
 // Middlewares
 app.use(express.json()); // Parse JSON bodies
+
 app.use(cors({
   origin: [
-    "https://monitor-eight-sigma.vercel.app",   // your Vercel frontend domain
-    "http://localhost:5173"                     // for local Vite dev
+    "https://monitor-comanfake.vercel.app",      // main production domain ✅
+    "https://monitor-git-main-comanfake.vercel.app", // optional: main branch preview
+    "http://localhost:5173"                        // local dev
   ],
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"]
+  credentials: true
 }));
+
 
 
 // Connect database
