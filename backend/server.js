@@ -11,7 +11,7 @@ app.use(express.json()); // Parse JSON bodies
 app.use(cors({
   origin: [
     "https://monitor-eight-sigma.vercel.app",   // your Vercel frontend domain
-    "https://localhost:5173"                     // for local Vite dev
+    "http://localhost:5173"                     // for local Vite dev
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"]
