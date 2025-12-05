@@ -9,16 +9,15 @@ const app = express();
 // Middlewares
 app.use(express.json()); // Parse JSON bodies
 
-app.use(cors({
-  origin: [
-    "https://monitor-comanfake.vercel.app",      // main production domain ✅
-    "https://monitor-git-main-comanfake.vercel.app", // optional: main branch preview
-    "http://localhost:5173"                        // local dev
-  ],
-  credentials: true
-}));
-
-
+app.use(
+  cors({
+    origin: [
+      "https://monitor-comanfake.vercel.app", // main production domain ✅
+      "http://localhost:5173", // local dev
+    ],
+    credentials: true,
+  })
+);
 
 // Connect database
 connectDB();
