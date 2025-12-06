@@ -8,7 +8,7 @@ const app = express();
 
 // Middlewares
 app.use(express.json()); // Parse JSON bodies
-
+// app.use(cors({ origin: true })); // restrict origins in production
 app.use(
   cors({
     origin: [
