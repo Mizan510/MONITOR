@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import UserReportN from "../components/UserReportN";
 import SBUN from "../products/SBU-N";
+import api from "../api/api";
 
 const InputFormN = () => {
   const initialState = {};
@@ -21,7 +22,7 @@ const InputFormN = () => {
   // Fetch all reports and check if already submitted today
   const fetchReports = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/form-datan");
+      const res = await api.get("http://localhost:5000/api/form-datan");
       setAllReports(res.data);
 
       const today = new Date().toISOString().slice(0, 10);
@@ -47,12 +48,13 @@ const InputFormN = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!loggedInUser) return alert("Logged-in user not detected!");
-    if (alreadySubmitted) return alert("You have already submitted today's report!");
+    if (alreadySubmitted)
+      return alert("You have already submitted today's report!");
 
     setIsLoading(true); // <-- Start loading
 
     try {
-      await axios.post("http://localhost:5000/api/form-datan", {
+      await api.post("http://localhost:5000/api/form-datan", {
         ...FormDataN,
         userName: loggedInUser,
       });
