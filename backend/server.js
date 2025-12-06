@@ -12,12 +12,14 @@ app.use(
   cors({
     origin: [
       "https://monitor-eight-sigma.vercel.app",
-      "http://localhost:5173"
+      "https://monitor-eight-sigma-git-main-comanfake.vercel.app",
+      "http://localhost:5173",
     ],
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     credentials: true,
   })
 );
+
+
 
 // ---------------------
 // Body parser
