@@ -13,8 +13,7 @@ const ContactPage = () => {
         </h1>
 
         <p className="text-red-600 text-center mb-10 text-xl xl:text-base">
-          If don't have any account or need any support or queries, feel free to
-          reach us:
+          If don't have any account, Feel free to reach us:
         </p>
 
         {/* Contact Box */}
