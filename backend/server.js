@@ -12,12 +12,12 @@ app.use(
   cors({
     origin: [
       "https://monitor-eight-sigma.vercel.app",
-      "https://monitor-eight-sigma-git-main-comanfake.vercel.app",
       "http://localhost:5173",
     ],
     credentials: true,
   })
 );
+
 
 
 
