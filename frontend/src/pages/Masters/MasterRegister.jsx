@@ -9,12 +9,13 @@ export default function MasterRegister() {
     email: "",
     password: "",
     role: "admin",
-    assignedForm: "", // 🟦 ADDED
+    assignedForm: ""
   };
 
   const [form, setForm] = useState(initialState);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false); // 🟦 SPINNER STATE
 
   const handleChange = (e) => {
     setForm({
@@ -27,35 +28,37 @@ export default function MasterRegister() {
     e.preventDefault();
     setError("");
     setSuccess("");
+    setLoading(true); // 🟦 START SPINNER
 
     try {
-      const response = await fetch(
-        "https://monitor-r0u9.onrender.com/api/auth/register-admin",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form), // 🟦 sends assignedForm too
-        }
-      );
+      const response = await fetch("http://localhost:5000/api/auth/register-admin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
       const data = await response.json();
 
       if (!response.ok) {
         setError(data.message || "Registration failed");
+        setLoading(false); // 🟥 STOP SPINNER ON ERROR
         return;
       }
 
       setSuccess("Admin registered successfully!");
-
       setForm(initialState);
+
     } catch (err) {
       setError("Server error. Try again.");
     }
+
+    setLoading(false); // 🟥 STOP SPINNER
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-lg">
+
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-2">
           Master Register for Admin Registration
         </h1>
@@ -76,11 +79,10 @@ export default function MasterRegister() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+
           {/* NAME */}
           <div>
-            <label className="block mb-1 text-gray-600 font-medium">
-              Admin Name
-            </label>
+            <label className="block mb-1 text-gray-600 font-medium">Admin Name</label>
             <input
               type="text"
               name="name"
@@ -94,9 +96,7 @@ export default function MasterRegister() {
 
           {/* EMAIL */}
           <div>
-            <label className="block mb-1 text-gray-600 font-medium">
-              Admin Email
-            </label>
+            <label className="block mb-1 text-gray-600 font-medium">Admin Email</label>
             <input
               type="email"
               name="email"
@@ -110,9 +110,7 @@ export default function MasterRegister() {
 
           {/* PASSWORD */}
           <div>
-            <label className="block mb-1 text-gray-600 font-medium">
-              Password
-            </label>
+            <label className="block mb-1 text-gray-600 font-medium">Password</label>
             <input
               type="password"
               name="password"
@@ -124,7 +122,7 @@ export default function MasterRegister() {
             />
           </div>
 
-          {/* 🟦 SELECT INPUT FORM */}
+          {/* ASSIGN FORM */}
           <div>
             <label className="block mb-1 text-gray-600 font-medium">
               Assign Input Form
@@ -146,11 +144,21 @@ export default function MasterRegister() {
             </select>
           </div>
 
+          {/* SUBMIT BUTTON WITH SPINNER */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white p-3 rounded-xl text-lg font-semibold hover:bg-blue-700 transition"
+            disabled={loading}
+            className={`w-full p-3 rounded-xl text-lg font-semibold transition
+              ${loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 text-white"}`}
           >
-            Register Admin
+            {loading ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Processing...
+              </div>
+            ) : (
+              "Register Admin"
+            )}
           </button>
         </form>
 

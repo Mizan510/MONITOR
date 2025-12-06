@@ -12,15 +12,13 @@ export default function AdminRegister() {
   });
 
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false); // ✅ added
+  const [loading, setLoading] = useState(false); // ✅ SPINNER STATE
 
   // 🔍 Check if any Master Admin exists
   useEffect(() => {
     async function checkAdmin() {
       try {
-        const res = await fetch(
-          "https://monitor-r0u9.onrender.com/api/auth/check-admin"
-        );
+        const res = await fetch("http://localhost:5000/api/auth/check-admin");
         const data = await res.json();
 
         if (!data.exists) {
@@ -43,42 +41,40 @@ export default function AdminRegister() {
   async function handleSubmit(e) {
     e.preventDefault();
     setMessage("");
-    setLoading(true); // ✅ start spinner
+    setLoading(true); // start spinner
 
     try {
       const stored = JSON.parse(localStorage.getItem("user"));
       const adminId = stored?._id;
 
-      const res = await fetch(
-        "https://monitor-r0u9.onrender.com/api/auth/register-user",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: form.name,
-            email: form.email,
-            password: form.password,
-            adminId,
-          }),
-        }
-      );
+      const res = await fetch("http://localhost:5000/api/auth/register-user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          password: form.password,
+          adminId,
+        }),
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
         setMessage(data.message || "Registration failed");
-        setLoading(false); // ❗ stop spinner
+        setLoading(false); // stop spinner
         return;
       }
 
       setMessage("User registered successfully!");
+
       setForm({ name: "", email: "", password: "", role: "user" });
 
       setTimeout(() => navigate("/admin-dashboard"), 1500);
     } catch (err) {
       setMessage("Server error. Try again.");
     } finally {
-      setLoading(false); // ✅ always stop spinner
+      setLoading(false); // stop spinner always
     }
   }
 
@@ -135,7 +131,7 @@ export default function AdminRegister() {
             />
           </div>
 
-          {/* SUBMIT BUTTON WITH SPINNER */}
+          {/* ✅ SUBMIT BUTTON WITH SPINNER */}
           <button
             type="submit"
             disabled={loading}
@@ -165,7 +161,7 @@ export default function AdminRegister() {
                 ></path>
               </svg>
             )}
-            {loading ? "Creating User..." : "Register your User"}
+            {loading ? "Registering..." : "Register your User"}
           </button>
         </form>
       </div>
