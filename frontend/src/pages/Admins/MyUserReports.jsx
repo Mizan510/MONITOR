@@ -21,31 +21,30 @@ const MyUserReports = () => {
     setAdminName(admin?.name || "");
   }, []);
 
- // Fetch all reports (A, B, C, D, E, N)
-const fetchReports = async () => {
-  try {
-    const endpoints = [
-      "http://localhost:5000/api/form-dataa",
-      "http://localhost:5000/api/form-datab",
-      "http://localhost:5000/api/form-datac",
-      "http://localhost:5000/api/form-datad",
-      "http://localhost:5000/api/form-datae",
-      "http://localhost:5000/api/form-datan",
-    ];
+  // Fetch all reports (A, B, C, D, E, N)
+  const fetchReports = async () => {
+    try {
+      const endpoints = [
+        "https://monitor-r0u9.onrender.com/api/form-dataa",
+        "https://monitor-r0u9.onrender.com/api/form-datab",
+        "https://monitor-r0u9.onrender.com/api/form-datac",
+        "https://monitor-r0u9.onrender.com/api/form-datad",
+        "https://monitor-r0u9.onrender.com/api/form-datae",
+        "https://monitor-r0u9.onrender.com/api/form-datan",
+      ];
 
-    const responses = await Promise.all(
-      endpoints.map((url) => axios.get(url))
-    );
+      const responses = await Promise.all(
+        endpoints.map((url) => axios.get(url))
+      );
 
-    // merge all  
-    let combined = responses.flatMap((res) => res.data);
+      // merge all
+      let combined = responses.flatMap((res) => res.data);
 
-    setAllReports(combined);
-  } catch (err) {
-    console.error("Fetch error:", err.response?.data || err.message);
-  }
-};
-
+      setAllReports(combined);
+    } catch (err) {
+      console.error("Fetch error:", err.response?.data || err.message);
+    }
+  };
 
   // Fetch users created by this admin
   const fetchUsers = async () => {
@@ -56,7 +55,7 @@ const fetchReports = async () => {
       if (!adminId) return;
 
       const res = await axios.get(
-        `http://localhost:5000/api/auth/my-users/${adminId}`
+        `https://monitor-r0u9.onrender.com/api/auth/my-users/${adminId}`
       );
 
       setUsersUnderAdmin(res.data.users);
@@ -72,14 +71,12 @@ const fetchReports = async () => {
     }
   }, [adminName]);
 
-// Show either selected user or all users under this admin
-const filteredReports = selectedUser
-  ? allReports.filter(r => r.userName === selectedUser)
-  : allReports.filter(r =>
-      usersUnderAdmin.some(u => u.name === r.userName)
-    );
-
-
+  // Show either selected user or all users under this admin
+  const filteredReports = selectedUser
+    ? allReports.filter((r) => r.userName === selectedUser)
+    : allReports.filter((r) =>
+        usersUnderAdmin.some((u) => u.name === r.userName)
+      );
 
   return (
     <div className="p-6 w-full max-w-6xl mx-auto bg-white rounded-xl shadow-lg border border-gray-200 mt-8">
@@ -128,62 +125,60 @@ const filteredReports = selectedUser
       </div>
       {/* Reports Section */}
       <div className="mt-4">
-  {adminName.includes("A") && (
-    <UserReportA
-      loggedInUser={selectedUser}
-      allReports={filteredReports}
-      usersUnderAdmin={usersUnderAdmin}
-      showUserName
-    />
-  )}
+        {adminName.includes("A") && (
+          <UserReportA
+            loggedInUser={selectedUser}
+            allReports={filteredReports}
+            usersUnderAdmin={usersUnderAdmin}
+            showUserName
+          />
+        )}
 
-  {adminName.includes("B") && (
-    <UserReportB
-      loggedInUser={selectedUser}
-      allReports={filteredReports}
-      usersUnderAdmin={usersUnderAdmin}
-      showUserName
-    />
-  )}
+        {adminName.includes("B") && (
+          <UserReportB
+            loggedInUser={selectedUser}
+            allReports={filteredReports}
+            usersUnderAdmin={usersUnderAdmin}
+            showUserName
+          />
+        )}
 
-  {adminName.includes("C") && (
-    <UserReportC
-      loggedInUser={selectedUser}
-      allReports={filteredReports}
-      usersUnderAdmin={usersUnderAdmin}
-      showUserName
-    />
-  )}
+        {adminName.includes("C") && (
+          <UserReportC
+            loggedInUser={selectedUser}
+            allReports={filteredReports}
+            usersUnderAdmin={usersUnderAdmin}
+            showUserName
+          />
+        )}
 
-  {adminName.includes("D") && (
-    <UserReportD
-      loggedInUser={selectedUser}
-      allReports={filteredReports}
-      usersUnderAdmin={usersUnderAdmin}
-      showUserName
-    />
-  )}
+        {adminName.includes("D") && (
+          <UserReportD
+            loggedInUser={selectedUser}
+            allReports={filteredReports}
+            usersUnderAdmin={usersUnderAdmin}
+            showUserName
+          />
+        )}
 
-  {adminName.includes("E") && (
-    <UserReportE
-      loggedInUser={selectedUser}
-      allReports={filteredReports}
-      usersUnderAdmin={usersUnderAdmin}
-      showUserName
-    />
-  )}
+        {adminName.includes("E") && (
+          <UserReportE
+            loggedInUser={selectedUser}
+            allReports={filteredReports}
+            usersUnderAdmin={usersUnderAdmin}
+            showUserName
+          />
+        )}
 
-  {adminName.includes("N") && (
-    <UserReportN
-      loggedInUser={selectedUser}
-      allReports={filteredReports}
-      usersUnderAdmin={usersUnderAdmin}
-      showUserName
-    />
-  )}
-</div>
-
-
+        {adminName.includes("N") && (
+          <UserReportN
+            loggedInUser={selectedUser}
+            allReports={filteredReports}
+            usersUnderAdmin={usersUnderAdmin}
+            showUserName
+          />
+        )}
+      </div>
     </div>
   );
 };

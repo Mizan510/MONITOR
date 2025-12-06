@@ -23,7 +23,9 @@ const AllUserReports = () => {
   // Fetch all admins
   const fetchAdmins = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/auth/get-admins");
+      const res = await axios.get(
+        "https://monitor-r0u9.onrender.com/api/auth/get-admins"
+      );
       setAdmins(res.data);
     } catch (err) {
       console.error("Admin fetch error:", err);
@@ -34,7 +36,7 @@ const AllUserReports = () => {
   const fetchUsersUnderAdmin = async (adminId) => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/auth/my-users/${adminId}`
+        `https://monitor-r0u9.onrender.com/api/auth/my-users/${adminId}`
       );
       setUsersUnderAdmin(res.data.users || []);
     } catch (err) {
@@ -46,12 +48,12 @@ const AllUserReports = () => {
   const fetchReports = async () => {
     try {
       const endpoints = [
-        "http://localhost:5000/api/form-dataa",
-        "http://localhost:5000/api/form-datab",
-        "http://localhost:5000/api/form-datac",
-        "http://localhost:5000/api/form-datad",
-        "http://localhost:5000/api/form-datae",
-        "http://localhost:5000/api/form-datan",
+        "https://monitor-r0u9.onrender.com/api/form-dataa",
+        "https://monitor-r0u9.onrender.com/api/form-datab",
+        "https://monitor-r0u9.onrender.com/api/form-datac",
+        "https://monitor-r0u9.onrender.com/api/form-datad",
+        "https://monitor-r0u9.onrender.com/api/form-datae",
+        "https://monitor-r0u9.onrender.com/api/form-datan",
       ];
 
       const responses = await Promise.all(
@@ -84,45 +86,49 @@ const AllUserReports = () => {
   // 🗑 DELETE DATA BY DATE RANGE
   // -----------------------------------------
   const deleteByDateRange = async () => {
-  if (!selectedUser) return alert("Select a user first");
-  if (!startDate || !endDate) return alert("Select start and end date");
+    if (!selectedUser) return alert("Select a user first");
+    if (!startDate || !endDate) return alert("Select start and end date");
 
-  if (!window.confirm(
-    `Delete all reports for ${selectedUser} from ${startDate} to ${endDate}?`
-  )) return;
-
-  const routes = ["A", "B", "C", "D", "E", "N"];
-
-  try {
-    const results = await Promise.allSettled(
-      routes.map((r) =>
-        axios.delete(`http://localhost:5000/api/form-data${r}/delete-by-date-range`, {
-          params: { user: selectedUser, startDate, endDate }
-        })
+    if (
+      !window.confirm(
+        `Delete all reports for ${selectedUser} from ${startDate} to ${endDate}?`
       )
-    );
+    )
+      return;
 
-    // OPTIONAL: Log which routes failed
-    results.forEach((res, idx) => {
-      if (res.status === "rejected") {
-        console.warn(`Route ${routes[idx]} delete failed`, res.reason);
-      }
-    });
-
-    alert("Reports deleted successfully");
+    const routes = ["A", "B", "C", "D", "E", "N"];
 
     try {
-      await fetchAllReports();
+      const results = await Promise.allSettled(
+        routes.map((r) =>
+          axios.delete(
+            `https://monitor-r0u9.onrender.com/api/form-data${r}/delete-by-date-range`,
+            {
+              params: { user: selectedUser, startDate, endDate },
+            }
+          )
+        )
+      );
+
+      // OPTIONAL: Log which routes failed
+      results.forEach((res, idx) => {
+        if (res.status === "rejected") {
+          console.warn(`Route ${routes[idx]} delete failed`, res.reason);
+        }
+      });
+
+      alert("Reports deleted successfully");
+
+      try {
+        await fetchAllReports();
+      } catch (err) {
+        console.error("Refresh failed:", err);
+      }
     } catch (err) {
-      console.error("Refresh failed:", err);
+      console.error(err);
+      alert("Unexpected error (should not happen)");
     }
-
-  } catch (err) {
-    console.error(err);
-    alert("Unexpected error (should not happen)");
-  }
-};
-
+  };
 
   return (
     <div className="p-6 w-full max-w-6xl mx-auto bg-white shadow-md rounded-xl">

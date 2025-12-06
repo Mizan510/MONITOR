@@ -21,7 +21,9 @@ const InputFormA = () => {
   // Fetch all reports for SBU-A
   const fetchReports = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/form-dataa");
+      const res = await axios.get(
+        "https://monitor-r0u9.onrender.com/api/form-dataa"
+      );
       setAllReports(res.data);
 
       // Check if the user already submitted today
@@ -56,7 +58,7 @@ const InputFormA = () => {
     setIsLoading(true); // <-- Start loading
 
     try {
-      await axios.post("http://localhost:5000/api/form-dataa", {
+      await axios.post("https://monitor-r0u9.onrender.com/api/form-dataa", {
         ...FormDataA,
         userName: loggedInUser,
       });

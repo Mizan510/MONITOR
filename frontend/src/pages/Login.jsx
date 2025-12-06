@@ -11,7 +11,9 @@ export default function Login() {
   useEffect(() => {
     async function checkAdmin() {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/check-admin");
+        const res = await fetch(
+          "https://monitor-r0u9.onrender.com/api/auth/check-admin"
+        );
         const data = await res.json();
         if (!data.exists) {
           alert("No admin registered yet!");
@@ -29,64 +31,66 @@ export default function Login() {
   }
 
   // LOGIN
-async function handleSubmit(e) {
-  e.preventDefault();
-  setError("");
-  setLoading(true); // ✅ Start spinner
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError("");
+    setLoading(true); // ✅ Start spinner
 
-  try {
-    const res = await fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    try {
+      const res = await fetch(
+        "https://monitor-r0u9.onrender.com/api/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        }
+      );
 
-    const data = await res.json();
+      const data = await res.json();
 
-    // ------------------------------
-    // 1️⃣ Check if account inactive
-    // ------------------------------
-    if (data.inactive) {
-      alert(data.message || "Your account is inactive.");
-      setLoading(false);
-      return; // Stop login
-    }
-
-    // // ------------------------------
-    // // 2️⃣ Check if subscription expired
-    // // ------------------------------
-    // if (data.expired) {
-    //   alert(data.message || "Your subscription has expired.");
-    //   setLoading(false);
-    //   return; // Stop login
-    // }
-
-    // ------------------------------
-    // 3️⃣ Successful login
-    // ------------------------------
-    if (res.ok) {
-      localStorage.setItem("user", JSON.stringify(data.user));
-
-      // ⭐ ROLE-BASED REDIRECT
-      if (data.user.role === "admin") {
-        navigate("/admin-dashboard");
-      } else if (data.user.role === "user") {
-        navigate("/user-dashboard");
-      } else if (data.user.role === "superadmin") {
-        navigate("/master-dashboard");
-      } else {
-        navigate("/login"); // fallback
+      // ------------------------------
+      // 1️⃣ Check if account inactive
+      // ------------------------------
+      if (data.inactive) {
+        alert(data.message || "Your account is inactive.");
+        setLoading(false);
+        return; // Stop login
       }
-    } else {
-      setError(data.message || "Login failed");
-    }
-  } catch (err) {
-    setError("Server error. Try again.");
-  } finally {
-    setLoading(false); // ✅ Stop spinner
-  }
-}
 
+      // // ------------------------------
+      // // 2️⃣ Check if subscription expired
+      // // ------------------------------
+      // if (data.expired) {
+      //   alert(data.message || "Your subscription has expired.");
+      //   setLoading(false);
+      //   return; // Stop login
+      // }
+
+      // ------------------------------
+      // 3️⃣ Successful login
+      // ------------------------------
+      if (res.ok) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        // ⭐ ROLE-BASED REDIRECT
+        if (data.user.role === "admin") {
+          navigate("/admin-dashboard");
+        } else if (data.user.role === "user") {
+          navigate("/user-dashboard");
+        } else if (data.user.role === "superadmin") {
+          navigate("/master-dashboard");
+        } else {
+          navigate("/login"); // fallback
+        }
+      } else {
+        setError(data.message || "Login failed");
+      }
+    } catch (err) {
+      setError("Server error. Try again.");
+    } finally {
+      setLoading(false); // ✅ Stop spinner
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100 p-4">
@@ -146,7 +150,7 @@ async function handleSubmit(e) {
               loading ? "opacity-70 cursor-not-allowed" : ""
             }`}
             disabled={loading}
-           >
+          >
             {loading && (
               <svg
                 className="animate-spin h-5 w-5 text-white"

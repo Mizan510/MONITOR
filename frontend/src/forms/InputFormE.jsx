@@ -21,7 +21,9 @@ const InputFormE = () => {
   // Fetch all reports and check if already submitted today
   const fetchReports = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/form-datae");
+      const res = await axios.get(
+        "https://monitor-r0u9.onrender.com/api/form-datae"
+      );
       setAllReports(res.data);
 
       const today = new Date().toISOString().slice(0, 10);
@@ -53,7 +55,7 @@ const InputFormE = () => {
     setIsLoading(true); // <-- Start loading
 
     try {
-      await axios.post("http://localhost:5000/api/form-datae", {
+      await axios.post("https://monitor-r0u9.onrender.com/api/form-datae", {
         ...FormDataE,
         userName: loggedInUser,
       });

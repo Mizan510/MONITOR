@@ -9,7 +9,7 @@ export default function MasterRegister() {
     email: "",
     password: "",
     role: "admin",
-    assignedForm: ""   // 🟦 ADDED
+    assignedForm: "", // 🟦 ADDED
   };
 
   const [form, setForm] = useState(initialState);
@@ -29,11 +29,14 @@ export default function MasterRegister() {
     setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/register-admin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),   // 🟦 sends assignedForm too
-      });
+      const response = await fetch(
+        "https://monitor-r0u9.onrender.com/api/auth/register-admin",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form), // 🟦 sends assignedForm too
+        }
+      );
 
       const data = await response.json();
 
@@ -45,7 +48,6 @@ export default function MasterRegister() {
       setSuccess("Admin registered successfully!");
 
       setForm(initialState);
-
     } catch (err) {
       setError("Server error. Try again.");
     }
@@ -74,10 +76,11 @@ export default function MasterRegister() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-
           {/* NAME */}
           <div>
-            <label className="block mb-1 text-gray-600 font-medium">Admin Name</label>
+            <label className="block mb-1 text-gray-600 font-medium">
+              Admin Name
+            </label>
             <input
               type="text"
               name="name"
@@ -91,7 +94,9 @@ export default function MasterRegister() {
 
           {/* EMAIL */}
           <div>
-            <label className="block mb-1 text-gray-600 font-medium">Admin Email</label>
+            <label className="block mb-1 text-gray-600 font-medium">
+              Admin Email
+            </label>
             <input
               type="email"
               name="email"
@@ -105,7 +110,9 @@ export default function MasterRegister() {
 
           {/* PASSWORD */}
           <div>
-            <label className="block mb-1 text-gray-600 font-medium">Password</label>
+            <label className="block mb-1 text-gray-600 font-medium">
+              Password
+            </label>
             <input
               type="password"
               name="password"

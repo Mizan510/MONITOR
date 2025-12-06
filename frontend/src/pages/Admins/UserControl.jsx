@@ -12,7 +12,7 @@ export default function UserControl() {
   async function fetchUsers() {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/auth/my-users/${adminId}`
+        `https://monitor-r0u9.onrender.com/api/auth/my-users/${adminId}`
       );
 
       const data = await res.json();
@@ -37,7 +37,7 @@ export default function UserControl() {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/auth/delete-user/${userId}`,
+        `https://monitor-r0u9.onrender.com/api/auth/delete-user/${userId}`,
         {
           method: "DELETE",
         }

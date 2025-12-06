@@ -30,7 +30,9 @@ export default function AllAdminControl() {
 
   async function getAdmins() {
     try {
-      const res = await fetch("http://localhost:5000/api/auth/get-admins");
+      const res = await fetch(
+        "https://monitor-r0u9.onrender.com/api/auth/get-admins"
+      );
       const data = await res.json();
       setAdmins(data);
     } catch (err) {
@@ -40,7 +42,9 @@ export default function AllAdminControl() {
 
   async function getUsers() {
     try {
-      const res = await fetch("http://localhost:5000/api/auth/get-users");
+      const res = await fetch(
+        "https://monitor-r0u9.onrender.com/api/auth/get-users"
+      );
       const data = await res.json();
       setUsers(data);
     } catch (err) {
@@ -53,7 +57,7 @@ export default function AllAdminControl() {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/auth/delete-admin/${id}`,
+        `https://monitor-r0u9.onrender.com/api/auth/delete-admin/${id}`,
         { method: "DELETE" }
       );
 
@@ -71,7 +75,7 @@ export default function AllAdminControl() {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/auth/delete-user/${id}`,
+        `https://monitor-r0u9.onrender.com/api/auth/delete-user/${id}`,
         { method: "DELETE" }
       );
 
@@ -84,7 +88,7 @@ export default function AllAdminControl() {
   async function toggleAdminActive(id) {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/auth/toggle-admin-active/${id}`,
+        `https://monitor-r0u9.onrender.com/api/auth/toggle-admin-active/${id}`,
         { method: "PUT" }
       );
 
@@ -97,7 +101,7 @@ export default function AllAdminControl() {
   async function toggleUserActive(id) {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/auth/toggle-user-active/${id}`,
+        `https://monitor-r0u9.onrender.com/api/auth/toggle-user-active/${id}`,
         { method: "PUT" }
       );
 
@@ -110,126 +114,124 @@ export default function AllAdminControl() {
   /* ----------------------------------------------------
    EXPORT ADMINS TO EXCEL (Stylish & Organized)
 ---------------------------------------------------- */
-async function exportAdminsExcel() {
-  const workbook = new ExcelJS.Workbook();
-  const sheet = workbook.addWorksheet("Admins");
+  async function exportAdminsExcel() {
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet("Admins");
 
-  // Define columns
-  sheet.columns = [
-    { header: "Name", key: "name", width: 25 },
-    { header: "Email", key: "email", width: 30 },
-    { header: "Created Time (BD)", key: "created", width: 25 },
-    { header: "Status Changed (BD)", key: "updated", width: 25 },
-    { header: "Status", key: "status", width: 15 },
-  ];
+    // Define columns
+    sheet.columns = [
+      { header: "Name", key: "name", width: 25 },
+      { header: "Email", key: "email", width: 30 },
+      { header: "Created Time (BD)", key: "created", width: 25 },
+      { header: "Status Changed (BD)", key: "updated", width: 25 },
+      { header: "Status", key: "status", width: 15 },
+    ];
 
-  // Header styling
-  sheet.getRow(1).eachCell((cell) => {
-    cell.font = { bold: true, color: { argb: "FFFFFFFF" } }; // white text
-    cell.fill = {
-      type: "pattern",
-      pattern: "solid",
-      fgColor: { argb: "FF1F4E79" }, // blue header
-    };
-    cell.alignment = { vertical: "middle", horizontal: "center" };
-    cell.border = {
-      top: { style: "thin" },
-      left: { style: "thin" },
-      bottom: { style: "thin" },
-      right: { style: "thin" },
-    };
-  });
-
-  // Insert data
-  admins.forEach((a) => {
-    const row = sheet.addRow({
-      name: a.name,
-      email: a.email,
-      created: formatBD(a.createdAt),
-      updated: formatBD(a.updatedAt),
-      status: a.isActive ? "Active" : "Inactive",
-    });
-
-    // Apply borders & alignment to each row
-    row.eachCell((cell) => {
+    // Header styling
+    sheet.getRow(1).eachCell((cell) => {
+      cell.font = { bold: true, color: { argb: "FFFFFFFF" } }; // white text
+      cell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FF1F4E79" }, // blue header
+      };
+      cell.alignment = { vertical: "middle", horizontal: "center" };
       cell.border = {
         top: { style: "thin" },
         left: { style: "thin" },
         bottom: { style: "thin" },
         right: { style: "thin" },
       };
-      cell.alignment = { vertical: "middle", horizontal: "center" };
     });
-  });
 
-  // Save file
-  const buffer = await workbook.xlsx.writeBuffer();
-  saveAs(new Blob([buffer]), "All_Admins.xlsx");
-}
+    // Insert data
+    admins.forEach((a) => {
+      const row = sheet.addRow({
+        name: a.name,
+        email: a.email,
+        created: formatBD(a.createdAt),
+        updated: formatBD(a.updatedAt),
+        status: a.isActive ? "Active" : "Inactive",
+      });
 
+      // Apply borders & alignment to each row
+      row.eachCell((cell) => {
+        cell.border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+        cell.alignment = { vertical: "middle", horizontal: "center" };
+      });
+    });
+
+    // Save file
+    const buffer = await workbook.xlsx.writeBuffer();
+    saveAs(new Blob([buffer]), "All_Admins.xlsx");
+  }
 
   /* ----------------------------------------------------
    EXPORT USERS TO EXCEL (Styled Like Admin Excel)
 ---------------------------------------------------- */
-async function exportUsersExcel() {
-  const workbook = new ExcelJS.Workbook();
-  const sheet = workbook.addWorksheet("Users");
+  async function exportUsersExcel() {
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet("Users");
 
-  // Define columns
-  sheet.columns = [
-    { header: "Name", key: "name", width: 25 },
-    { header: "Email", key: "email", width: 30 },
-    { header: "Created By", key: "createdBy", width: 25 },
-    { header: "Created Time (BD)", key: "created", width: 25 },
-    { header: "Status Changed (BD)", key: "updated", width: 25 },
-    { header: "Status", key: "status", width: 15 },
-  ];
+    // Define columns
+    sheet.columns = [
+      { header: "Name", key: "name", width: 25 },
+      { header: "Email", key: "email", width: 30 },
+      { header: "Created By", key: "createdBy", width: 25 },
+      { header: "Created Time (BD)", key: "created", width: 25 },
+      { header: "Status Changed (BD)", key: "updated", width: 25 },
+      { header: "Status", key: "status", width: 15 },
+    ];
 
-  // Header styling
-  sheet.getRow(1).eachCell((cell) => {
-    cell.font = { bold: true, color: { argb: "FFFFFFFF" } }; // white
-    cell.fill = {
-      type: "pattern",
-      pattern: "solid",
-      fgColor: { argb: "FF1F4E79" }, // navy blue
-    };
-    cell.alignment = { vertical: "middle", horizontal: "center" };
-    cell.border = {
-      top: { style: "thin" },
-      left: { style: "thin" },
-      bottom: { style: "thin" },
-      right: { style: "thin" },
-    };
-  });
-
-  // Insert user data
-  users.forEach((u) => {
-    const row = sheet.addRow({
-      name: u.name,
-      email: u.email,
-      createdBy: u.createdBy ? u.createdBy.name : "Master Admin",
-      created: formatBD(u.createdAt),
-      updated: formatBD(u.updatedAt),
-      status: u.isActive ? "Active" : "Inactive",
-    });
-
-    // Apply borders + alignment to each cell
-    row.eachCell((cell) => {
+    // Header styling
+    sheet.getRow(1).eachCell((cell) => {
+      cell.font = { bold: true, color: { argb: "FFFFFFFF" } }; // white
+      cell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FF1F4E79" }, // navy blue
+      };
+      cell.alignment = { vertical: "middle", horizontal: "center" };
       cell.border = {
         top: { style: "thin" },
         left: { style: "thin" },
         bottom: { style: "thin" },
         right: { style: "thin" },
       };
-      cell.alignment = { vertical: "middle", horizontal: "center" };
     });
-  });
 
-  // Save file
-  const buffer = await workbook.xlsx.writeBuffer();
-  saveAs(new Blob([buffer]), "Users.xlsx");
-}
+    // Insert user data
+    users.forEach((u) => {
+      const row = sheet.addRow({
+        name: u.name,
+        email: u.email,
+        createdBy: u.createdBy ? u.createdBy.name : "Master Admin",
+        created: formatBD(u.createdAt),
+        updated: formatBD(u.updatedAt),
+        status: u.isActive ? "Active" : "Inactive",
+      });
 
+      // Apply borders + alignment to each cell
+      row.eachCell((cell) => {
+        cell.border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+        cell.alignment = { vertical: "middle", horizontal: "center" };
+      });
+    });
+
+    // Save file
+    const buffer = await workbook.xlsx.writeBuffer();
+    saveAs(new Blob([buffer]), "Users.xlsx");
+  }
 
   return (
     <div className="p-10 text-gray-800">

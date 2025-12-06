@@ -21,7 +21,9 @@ const InputFormB = () => {
   // Fetch all reports
   const fetchReports = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/form-datab");
+      const res = await axios.get(
+        "https://monitor-r0u9.onrender.com/api/form-datab"
+      );
       setAllReports(res.data);
 
       // Check if user already submitted today
@@ -56,7 +58,7 @@ const InputFormB = () => {
     setIsLoading(true); // <-- Start loading
 
     try {
-      await axios.post("http://localhost:5000/api/form-datab", {
+      await axios.post("https://monitor-r0u9.onrender.com/api/form-datab", {
         ...FormDataB,
         userName: loggedInUser,
       });
