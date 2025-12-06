@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import UserReportD from "../components/UserReportD";
 import SBUD from "../products/SBU-D";
-import api from "../api/api";
 
 const InputFormD = () => {
   const initialState = {};
@@ -22,7 +21,7 @@ const InputFormD = () => {
   // Fetch all reports
   const fetchReports = async () => {
     try {
-      const res = await api.get("http://localhost:5000/api/form-datad");
+      const res = await axios.get("http://localhost:5000/api/form-datad");
       setAllReports(res.data);
 
       // Check if user already submitted today
@@ -57,7 +56,7 @@ const InputFormD = () => {
     setIsLoading(true); // <-- Start loading
 
     try {
-      await api.post("http://localhost:5000/api/form-datad", {
+      await axios.post("http://localhost:5000/api/form-datad", {
         ...FormDataD,
         userName: loggedInUser,
       });

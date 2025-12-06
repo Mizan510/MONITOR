@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import api from "../../api/api";
-
 // Import all report components
 import UserReportA from "../../components/UserReportA";
 import UserReportB from "../../components/UserReportB";
@@ -86,49 +84,45 @@ const AllUserReports = () => {
   // 🗑 DELETE DATA BY DATE RANGE
   // -----------------------------------------
   const deleteByDateRange = async () => {
-    if (!selectedUser) return alert("Select a user first");
-    if (!startDate || !endDate) return alert("Select start and end date");
+  if (!selectedUser) return alert("Select a user first");
+  if (!startDate || !endDate) return alert("Select start and end date");
 
-    if (
-      !window.confirm(
-        `Delete all reports for ${selectedUser} from ${startDate} to ${endDate}?`
+  if (!window.confirm(
+    `Delete all reports for ${selectedUser} from ${startDate} to ${endDate}?`
+  )) return;
+
+  const routes = ["A", "B", "C", "D", "E", "N"];
+
+  try {
+    const results = await Promise.allSettled(
+      routes.map((r) =>
+        axios.delete(`http://localhost:5000/api/form-data${r}/delete-by-date-range`, {
+          params: { user: selectedUser, startDate, endDate }
+        })
       )
-    )
-      return;
+    );
 
-    const routes = ["A", "B", "C", "D", "E", "N"];
+    // OPTIONAL: Log which routes failed
+    results.forEach((res, idx) => {
+      if (res.status === "rejected") {
+        console.warn(`Route ${routes[idx]} delete failed`, res.reason);
+      }
+    });
+
+    alert("Reports deleted successfully");
 
     try {
-      const results = await Promise.allSettled(
-        routes.map((r) =>
-          axios.delete(
-            `http://localhost:5000/api/form-data${r}/delete-by-date-range`,
-            {
-              params: { user: selectedUser, startDate, endDate },
-            }
-          )
-        )
-      );
-
-      // OPTIONAL: Log which routes failed
-      results.forEach((res, idx) => {
-        if (res.status === "rejected") {
-          console.warn(`Route ${routes[idx]} delete failed`, res.reason);
-        }
-      });
-
-      alert("Reports deleted successfully");
-
-      try {
-        await fetchAllReports();
-      } catch (err) {
-        console.error("Refresh failed:", err);
-      }
+      await fetchAllReports();
     } catch (err) {
-      console.error(err);
-      alert("Unexpected error (should not happen)");
+      console.error("Refresh failed:", err);
     }
-  };
+
+  } catch (err) {
+    console.error(err);
+    alert("Unexpected error (should not happen)");
+  }
+};
+
 
   return (
     <div className="p-6 w-full max-w-6xl mx-auto bg-white shadow-md rounded-xl">
