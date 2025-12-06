@@ -18,7 +18,7 @@ export default function AdminRegister() {
   useEffect(() => {
     async function checkAdmin() {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/check-admin");
+        const res = await fetch("https://monitor-r0u9.onrender.com/api/auth/check-admin");
         const data = await res.json();
 
         if (!data.exists) {
@@ -47,7 +47,7 @@ export default function AdminRegister() {
       const stored = JSON.parse(localStorage.getItem("user"));
       const adminId = stored?._id;
 
-      const res = await fetch("http://localhost:5000/api/auth/register-user", {
+      const res = await fetch("https://monitor-r0u9.onrender.com/api/auth/register-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

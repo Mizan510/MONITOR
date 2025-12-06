@@ -31,7 +31,7 @@ export default function MasterRegister() {
     setLoading(true); // 🟦 START SPINNER
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/register-admin", {
+      const response = await fetch("https://monitor-r0u9.onrender.com/api/auth/register-admin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
