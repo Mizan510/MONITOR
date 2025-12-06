@@ -12,6 +12,7 @@ export default function AdminRegister() {
   });
 
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false); // ✅ added
 
   // 🔍 Check if any Master Admin exists
   useEffect(() => {
@@ -42,11 +43,11 @@ export default function AdminRegister() {
   async function handleSubmit(e) {
     e.preventDefault();
     setMessage("");
+    setLoading(true); // ✅ start spinner
 
     try {
-      // get current admin id (replace with your auth/context if different)
       const stored = JSON.parse(localStorage.getItem("user"));
-      const adminId = stored?._id; // ensure you save _id at login
+      const adminId = stored?._id;
 
       const res = await fetch(
         "https://monitor-r0u9.onrender.com/api/auth/register-user",
@@ -57,7 +58,7 @@ export default function AdminRegister() {
             name: form.name,
             email: form.email,
             password: form.password,
-            adminId, // required by backend
+            adminId,
           }),
         }
       );
@@ -66,17 +67,18 @@ export default function AdminRegister() {
 
       if (!res.ok) {
         setMessage(data.message || "Registration failed");
+        setLoading(false); // ❗ stop spinner
         return;
       }
 
       setMessage("User registered successfully!");
-
-      // Reset fields
       setForm({ name: "", email: "", password: "", role: "user" });
 
       setTimeout(() => navigate("/admin-dashboard"), 1500);
     } catch (err) {
       setMessage("Server error. Try again.");
+    } finally {
+      setLoading(false); // ✅ always stop spinner
     }
   }
 
@@ -133,11 +135,37 @@ export default function AdminRegister() {
             />
           </div>
 
+          {/* SUBMIT BUTTON WITH SPINNER */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700"
+            disabled={loading}
+            className={`w-full bg-blue-600 text-white py-3 rounded-lg font-semibold flex justify-center items-center gap-2 ${
+              loading ? "opacity-70 cursor-not-allowed" : ""
+            }`}
           >
-            Register your User
+            {loading && (
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+            )}
+            {loading ? "Creating User..." : "Register your User"}
           </button>
         </form>
       </div>
